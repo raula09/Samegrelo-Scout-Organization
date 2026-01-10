@@ -9,6 +9,7 @@ function FullGallery({ images }) {
   return (
     <div className="container gallery-page">
       <div className="section-title">
+        {/* აქედან ამოვიღე <img> თეგი */}
         <h2>სრული გალერეა</h2>
         <Link to="/" className="cta-btn back-btn">← მთავარზე დაბრუნება</Link>
       </div>
@@ -121,8 +122,9 @@ function App() {
   return (
     <div className="app-container">
       <nav>
+        {/* აქედანაც ამოვიღე <img>, დარჩა მხოლოდ ტექსტი */}
         <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
-        სამეგრელოს სკაუტები
+          სამეგრელოს სკაუტები
         </Link>
         <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? '✕' : '☰'}
