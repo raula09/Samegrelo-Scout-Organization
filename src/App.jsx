@@ -113,7 +113,9 @@ function App() {
   const galleryImages = [
     '/assets/photos/chveni-fotoebi/1.jpg', '/assets/photos/chveni-fotoebi/2.jpg',
     '/assets/photos/chveni-fotoebi/3.jpg', '/assets/photos/chveni-fotoebi/4.jpg',
-    '/assets/photos/chveni-fotoebi/5.jpg', '/assets/photos/chveni-fotoebi/6.jpg'
+    '/assets/photos/chveni-fotoebi/5.jpg', '/assets/photos/chveni-fotoebi/6.jpg',
+    '/assets/photos/chveni-fotoebi/7.jpg', '/assets/photos/chveni-fotoebi/8.jpg',
+    '/assets/photos/chveni-fotoebi/9.jpg', '/assets/photos/chveni-fotoebi/10.jpg'
   ];
 
   return (
