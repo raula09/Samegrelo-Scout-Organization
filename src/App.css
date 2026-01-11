@@ -189,7 +189,18 @@ footer {
         width: 100%;
         background-color: var(--dark-green);
         padding: 20px 0;
+        
+        /* დაამატე ეს ხაზები გასაცენტრებლად */
+        align-items: center;       /* ჰორიზონტალური ცენტრირება */
+        justify-content: center;    /* ვერტიკალური ცენტრირება (საჭიროებისამებრ) */
+        text-align: center;         /* თავად ტექსტის ცენტრირება */
+        gap: 25px;                 /* დაშორება მენიუს წევრებს შორის */
     }
+
+    .nav-links.active li {
+        width: 100%;               /* ლინკმა დაიკავოს მთელი სიგანე უკეთესი კლიკისთვის */
+    }
+
     .hero-text h1 { font-size: 2rem; }
     .region-grid { grid-template-columns: 1fr; }
 }
