@@ -24,7 +24,7 @@ body {
     --white: #ffffff;
 }
 
-/* 2. ნავიგაცია */
+/* 2. ნავიგაცია (Desktop) */
 nav {
     background-color: var(--dark-green);
     display: flex;
@@ -38,13 +38,6 @@ nav {
     z-index: 1000;
 }
 
-.menu-icon {
-    display: none; 
-    color: var(--white);
-    font-size: 1.8rem;
-    cursor: pointer;
-}
-
 .logo {
     color: var(--gold) !important;
     font-weight: bold;
@@ -52,8 +45,16 @@ nav {
     font-size: 1.2rem;
 }
 
+.menu-icon {
+    display: none; 
+    color: var(--white);
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
 .nav-links {
     display: flex;
+    align-items: center;
     gap: 20px;
     list-style: none;
 }
@@ -64,6 +65,33 @@ nav {
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
+}
+
+/* ენის და ღამის რეჟიმის ღილაკები (Desktop-ზე მარცხნივ, მენიუსთან) */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-btn, .lang-btn {
+    cursor: pointer;
+    padding: 6px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.theme-btn:hover, .lang-btn:hover {
+    background: var(--white);
+    color: var(--dark-green);
 }
 
 /* 3. მთავარი სურათი (Hero) */
@@ -81,10 +109,9 @@ nav {
 .hero-text h1 { color: var(--white); font-size: 3rem; margin-bottom: 10px; }
 .hero-text p { color: var(--gold); font-size: 1.2rem; font-weight: bold; }
 
-/* 4. კონტეინერების გაფართოება */
+/* 4. კონტეინერები */
 .container, .activities-container, .gallery-container, .contact-container {
     width: 100%;
-    max-width: 100%;
     padding: 40px 5%;
 }
 
@@ -121,8 +148,6 @@ nav {
 .img-svaneti { background-image: url('/assets/photos/ushguli.jpg'); }
 
 .region-info { padding: 20px; border-left: 5px solid var(--bright-green); }
-.region-info h3 { color: var(--dark-green); margin-bottom: 5px; }
-.region-info p { color: #444; }
 
 /* 6. აქტივობები */
 .activities-list {
@@ -158,143 +183,20 @@ nav {
     cursor: pointer;
 }
 
-/* 8. ფუტერი */
-footer {
-    background-color: var(--dark-green);
-    color: var(--white);
-    padding: 40px 5%;
-    text-align: center;
-    width: 100%;
-    margin-top: 50px;
-    border-top: 4px solid var(--gold);
-}
-
-.social-links a {
-    color: var(--gold);
-    font-size: 1.8rem;
-    margin: 0 10px;
-    text-decoration: none;
-}
-
-/* 9. მობილურის ვერსია */
+/* 8. მობილურის ვერსია (Media Query) */
 @media (max-width: 768px) {
-    .menu-icon { display: block; }
-    .nav-links { display: none; }
+    .menu-icon { 
+        display: block; 
+    }
+
+    .nav-links {
+        display: none;
+    }
+
     .nav-links.active {
         display: flex;
         flex-direction: column;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background-color: var(--dark-green);
-        padding: 20px 0;
-        
-        /* დაამატე ეს ხაზები გასაცენტრებლად */
-        align-items: center;       /* ჰორიზონტალური ცენტრირება */
-        justify-content: center;    /* ვერტიკალური ცენტრირება (საჭიროებისამებრ) */
-        text-align: center;         /* თავად ტექსტის ცენტრირება */
-        gap: 25px;                 /* დაშორება მენიუს წევრებს შორის */
-    }
-
-    .nav-links.active li {
-        width: 100%;               /* ლინკმა დაიკავოს მთელი სიგანე უკეთესი კლიკისთვის */
-    }
-
-    .hero-text h1 { font-size: 2rem; }
-    .region-grid { grid-template-columns: 1fr; }
-}
-
-/* 10. მოდალური ფანჯრის ფიქსი (სურათის გასახსნელად) */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    cursor: pointer;
-}
-
-.modal-content {
-    max-width: 90%;
-    max-height: 80%;
-    border: 5px solid var(--white);
-    border-radius: 5px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-.close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    color: var(--white);
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* კონტაქტი და ღილაკი */
-.contact-form {
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.contact-form input, .contact-form textarea {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.cta-btn {
-    background-color: var(--bright-green);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    border: none;
-    cursor: pointer;
-}
-
-/* ენის გადამრთველი ღილაკი მენიუში */
-.lang-item {
-    margin-bottom: 10px;
-}
-
-.lang-btn {
-    background: #ffc107;
-    color: #162e21;
-    border: none;
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: 0.3s;
-}
-
-.lang-btn:hover {
-    background: #ffffff;
-    transform: scale(1.05);
-}
-
-/* მობილურის მენიუს გასწორება (App.css-ის მე-9 სექცია ჩაანაცვლე ამით) */
-@media (max-width: 768px) {
-    .menu-icon { display: block; }
-    .nav-links { display: none; }
-    .nav-links.active {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        align-items: center;    /* ყველაფრის გაცენტრება */
         justify-content: center;
         position: absolute;
         top: 70px;
@@ -302,42 +204,65 @@ footer {
         width: 100%;
         background-color: var(--dark-green);
         padding: 30px 0;
-        gap: 20px;
+        gap: 25px;
         z-index: 1001;
     }
+
+    /* English და ღამის ღილაკების გაცენტრება მობილურზე */
+    .nav-links.active .nav-controls {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+        gap: 15px;
+    }
+
+    .theme-btn, .lang-btn {
+        padding: 8px 18px; /* ოდნავ დიდი ზომა თითისთვის */
+    }
+
     .hero-text h1 { font-size: 2rem; }
     .region-grid { grid-template-columns: 1fr; }
 }
 
-.app-container {
-    background-color: white;
-    color: #162e21;
-    transition: all 0.4s ease;
-}
-
+/* 9. Dark Mode */
 .app-container.dark-mode {
     background-color: #1a1a1a;
     color: white;
 }
 
-/* მართვის ღილაკების სტილი მენიუში */
-.nav-controls {
+.dark-mode .section-title h2 { color: var(--gold); }
+.dark-mode .region-card { background: #2a2a2a; color: white; }
+.dark-mode .region-info p { color: #ccc; }
+
+/* 10. მოდალი */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
-.theme-btn, .lang-btn {
-    cursor: pointer;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid #ffc107;
-    background: transparent;
-    color: #ffc107;
-    font-weight: bold;
+.modal-content {
+    max-width: 90%;
+    max-height: 80%;
+    border: 3px solid white;
 }
 
-.dark-mode .theme-btn {
-    background: #ffc107;
-    color: #1a1a1a;
+/* 11. ფუტერი */
+footer {
+    background-color: var(--dark-green);
+    color: var(--white);
+    padding: 40px 5%;
+    text-align: center;
+    border-top: 4px solid var(--gold);
+}
+
+.social-links a {
+    color: var(--gold);
+    font-size: 1.8rem;
+    margin: 0 10px;
 }
