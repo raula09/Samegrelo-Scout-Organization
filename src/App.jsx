@@ -5,7 +5,7 @@ import './App.css'
 
 const translations = {
   ka: {
-    title: "სამეგრელოს სკაუტები",
+    title: "საქართველოს სკაუტური მოძრაობის სამეგრელოს ორგანიზაცია",
     dev: "საიტი დეველოპმეტის პროცესშია",
     subtitle: "საქართველოს სკაუტური მოძრაობის სამეგრელოს ორგანიზაციის წევრთა სარეგისტრაციო ფორმა",
     join: "შემოგვიერთდი",
@@ -31,10 +31,13 @@ const translations = {
     fullGallery: "სრული გალერეა",
     back: "← მთავარზე დაბრუნება",
     day: "☀️ დღე",
-    night: "🌙 ღამე"
+    night: "🌙 ღამე",
+    whoWeAre: "ვინ ვართ ჩვენ",
+    whatWeDo: "რას ვაკეთებთ",
+    mission: "მიზანი მისია და ხედვა"
   },
   en: {
-    title: "Scouts of Samegrelo",
+    title: "Samegrelo Organization of the Scout Movement of Georgia",
     dev: "Site is under development",
     subtitle: "Registration form of the members of the Samegrelo organization of the Scout Movement of Georgia",
     join: "Join Us",
@@ -45,9 +48,9 @@ const translations = {
     svanetiText: "Mestia and Ushguli.",
     activities: "Activities",
     camp: "🏕️ Camps",
-    hike: "🧗 Hiking",
-    projects: "🤝 Projects",
-    help: "🩹 Assistance",
+    hike: "Hiking",
+    projects: "Projects",
+    help: "Assistance",
     photos: "Our Photos",
     viewAll: "View All Photos",
     contact: "Contact",
@@ -60,7 +63,10 @@ const translations = {
     fullGallery: "Full Gallery",
     back: "← Back to Main",
     day: "☀️ Day",
-    night: "🌙 Night"
+    night: "🌙 Night",
+    whoWeAre: "Who We Are",
+    whatWeDo: "What We Do",
+    mission: "Mission & Vision"
   }
 };
 
@@ -113,11 +119,9 @@ function HomePage({ images, setSelectedImg, lang }) {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
-    // აიდები ჩასმულია შენი სკრინშოტების მიხედვით
-emailjs.sendForm(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,   //
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,  //
+    emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       form.current, 
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
@@ -180,7 +184,6 @@ emailjs.sendForm(
       <section className="contact-container" id="contact">
         <div className="section-title"><h2>{t.contact}</h2></div>
         <form ref={form} className="contact-form" onSubmit={sendEmail}>
-          {/* name ატრიბუტები ზუსტად ემთხვევა შენს EmailJS Template-ს */}
           <input type="text" name="name" placeholder={t.name} required />
           <input type="email" name="email" placeholder={t.email} required />
           <textarea name="message" placeholder={t.message} required></textarea>
@@ -213,16 +216,20 @@ function App() {
     window.scrollTo(0, 0);
   }, [location]);
 
+  // ფუნქცია მენიუს დასახურად ბმულზე დაჭერისას
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <nav>
-        <Link to="/" className="logo">სამეგრელოს სკაუტები</Link>
+        <Link to="/" className="logo" onClick={closeMenu}>
+          <img src="/assets/icon.ico" alt="Logo" style={{ height: '35px', borderRadius: '5px' }} />
+          <span>სამეგრელოს სკაუტები</span>
+        </Link>
         
         <div 
           className="menu-icon" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          role="button"
-          aria-label="Toggle menu"
         >
           {isMenuOpen ? '✕' : '☰'}
         </div>
@@ -236,10 +243,12 @@ function App() {
               {isDarkMode ? t.day : t.night}
             </button>
           </li>
-          <li><Link to="/">{t.main}</Link></li>
-          <li><Link to="/gallery">{t.gallery}</Link></li>
-          <li><a href="/#activities">{t.activities}</a></li>
-          <li><a href="/#contact">{t.contact}</a></li>
+          <li><Link to="/" onClick={closeMenu}>{t.main}</Link></li>
+          <li><a href="#about" onClick={closeMenu}>{t.whoWeAre}</a></li>
+          <li><a href="#activities" onClick={closeMenu}>{t.whatWeDo}</a></li>
+          <li><a href="#mission" onClick={closeMenu}>{t.mission}</a></li>
+          <li><Link to="/gallery" onClick={closeMenu}>{t.gallery}</Link></li>
+          <li><a href="#contact" onClick={closeMenu}>{t.contact}</a></li>
         </ul>
       </nav>
 
@@ -259,8 +268,8 @@ function App() {
         <div className="footer-content">
             <p>© 2026 Scout Of Samegrelo</p>
             <div className="social-links">
-                <a href="https://www.facebook.com/profile.php?id=100064482258846" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/scoutsofsamegrelo/" target="_blank" rel="noreferrer" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100064482258846" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/scoutsofsamegrelo/" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
             </div>
         </div>
       </footer>
@@ -270,8 +279,8 @@ function App() {
 
 function RegionCard({ title, text, imgClass, onClick }) {
   return (
-    <div className="region-card" onClick={onClick} role="button" aria-label={`View ${title}`}>
-      <div className={`region-img ${imgClass}`} role="img" aria-label={title}></div>
+    <div className="region-card" onClick={onClick}>
+      <div className={`region-img ${imgClass}`}></div>
       <div className="region-info"><h3>{title}</h3><p>{text}</p></div>
     </div>
   )
