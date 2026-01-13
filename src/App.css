@@ -348,3 +348,17 @@ footer {
     background-color: #1a1a1a;
     color: white;
 }
+
+/* გალერეის გვერდის სათაურის ზომის დაკლება */
+.gallery-page .section-title h1 {
+    font-size: 2rem !important; /* აქ შეგიძლია ციფრი შეცვალო (მაგ: 1.5 უფრო პატარა იქნება) */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* მობილურზე კიდევ უფრო დაპატარავება, რომ არ აიჭრას */
+@media (max-width: 768px) {
+    .gallery-page .section-title h1 {
+        font-size: 1.5rem !important;
+    }
+}
