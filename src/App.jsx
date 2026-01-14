@@ -37,7 +37,8 @@ const translations = {
         mission: "მიზანი მისია და ხედვა",
         aboutText: "ჩვენ ვართ მოხალისეობრივი, არაპოლიტიკური ორგანიზაცია ახალგაზრდებისთვის.",
         missionText: "ჩვენი მისიაა წვლილი შევიტანოთ ახალგაზრდების აღზრდაში ღირებულებათა სისტემის მეშვეობით.",
-        logoTitle: "სამეგრელოს სკაუტები"
+        logoLine1: "სამეგრელოს",
+        logoLine2: " სკაუტები"
     },
     en: {
         title: "Samegrelo Organization of the Scout Movement of Georgia",
@@ -72,9 +73,21 @@ const translations = {
         mission: "Mission & Vision",
         aboutText: "We are a voluntary, non-political educational movement for young people.",
         missionText: "Our mission is to contribute to the education of young people through a value system.",
-        logoTitle: "Samegrelo Scouts"
+        logoLine1: "Samegrelo",
+        logoLine2: "Scouts"
     }
 };
+
+// --- Helper Components ---
+
+function RegionCard({ title, text, imgClass }) {
+    return (
+        <div className="region-card">
+            <div className={`region-img ${imgClass}`}></div>
+            <div className="region-info"><h3>{title}</h3><p>{text}</p></div>
+        </div>
+    );
+}
 
 function AdminUpload({ lang }) {
     const [file, setFile] = useState(null);
@@ -255,6 +268,8 @@ function HomePage({ images, lang }) {
     );
 }
 
+// --- Main App Component ---
+
 function App() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [lang, setLang] = useState('ka');
@@ -281,15 +296,17 @@ function App() {
     const scrollToSection = (e, id) => {
         if (e) e.preventDefault();
         setIsMenuOpen(false);
-        if (location.pathname !== '/') {
-            navigate('/');
-            setTimeout(() => {
-                const target = id === 'top' ? document.documentElement : document.getElementById(id);
-                target?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        } else {
+        
+        const executeScroll = () => {
             const target = id === 'top' ? document.documentElement : document.getElementById(id);
             target?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        if (location.pathname !== '/') {
+            navigate('/');
+            setTimeout(executeScroll, 100);
+        } else {
+            executeScroll();
         }
     };
 
@@ -297,21 +314,36 @@ function App() {
         <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
             <nav>
                 <div className="logo" onClick={(e) => scrollToSection(e, 'top')} style={{ cursor: 'pointer' }}>
-                    <img src="/assets/icon.ico" alt="Logo" style={{ height: '35px', borderRadius: '5px' }} />
-                    <span>{t.logoTitle}</span>
+                    <img src="/assets/icon.ico" alt="Logo" style={{ height: '45px', borderRadius: '5px' }} />
+                    <div className="logo-text">
+                        <span className="line1">{t.logoLine1}</span>
+                        <span className="line2">{t.logoLine2}</span>
+                    </div>
                 </div>
-                <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? '✕' : '☰'}</div>
+
+                <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    {isMenuOpen ? '✕' : '☰'}
+                </div>
+
                 <ul className={isMenuOpen ? "nav-links active" : "nav-links"}>
-                    <li className="nav-controls">
-                        <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>{lang === 'ka' ? 'EN' : 'KA'}</button>
-                        <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? t.day : t.night}</button>
-                    </li>
                     <li><a href="/" onClick={(e) => scrollToSection(e, 'top')}>{t.main}</a></li>
                     <li><a href="#about" onClick={(e) => scrollToSection(e, 'about')}>{t.whoWeAre}</a></li>
                     <li><a href="#activities" onClick={(e) => scrollToSection(e, 'activities')}>{t.whatWeDo}</a></li>
                     <li><a href="#mission" onClick={(e) => scrollToSection(e, 'mission')}>{t.mission}</a></li>
                     <li><a href="#gallery" onClick={(e) => scrollToSection(e, 'gallery-section')}>{t.gallery}</a></li>
                     <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>{t.contact}</a></li>
+                    
+                    {/* Controls inside the UL so they hide/show with the hamburger menu */}
+                    <li className="nav-controls-wrapper">
+                        <div className="nav-controls">
+                            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>
+                                {lang === 'ka' ? 'EN' : 'KA'}
+                            </button>
+                            <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>
+                                {isDarkMode ? t.day : t.night}
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
 
@@ -324,19 +356,10 @@ function App() {
             <footer>
                 <p>© 2026 Scout Of Samegrelo</p>
                 <div className="social-links">
-                        <a href="https://facebook.com" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
-                        <a href="https://instagram.com" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
+                    <a href="https://facebook.com" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
                 </div>
             </footer>
-        </div>
-    );
-}
-
-function RegionCard({ title, text, imgClass }) {
-    return (
-        <div className="region-card">
-            <div className={`region-img ${imgClass}`}></div>
-            <div className="region-info"><h3>{title}</h3><p>{text}</p></div>
         </div>
     );
 }

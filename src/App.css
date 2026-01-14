@@ -66,20 +66,33 @@ nav {
     text-transform: uppercase;
 }
 
+/* Updated per your request */
 .nav-controls {
     display: flex;
-    gap: 8px;
+    gap: 12px;
+    margin-left: auto;
 }
 
+/* Styled to match the gold pill buttons in the image */
 .theme-btn,
 .lang-btn {
     cursor: pointer;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--gold);
+    padding: 6px 14px;
+    border-radius: 50px; /* Makes it a pill shape */
+    border: 1px solid var(--gold); /* Thin gold border */
     background: transparent;
-    color: var(--gold);
+    color: var(--gold); /* Gold text */
     font-size: 0.75rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.theme-btn:hover,
+.lang-btn:hover {
+    background: rgba(255, 193, 7, 0.1);
 }
 
 /* ===============================
