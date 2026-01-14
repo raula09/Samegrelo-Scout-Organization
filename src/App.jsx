@@ -76,6 +76,7 @@ const translations = {
   }
 };
 
+// Admin Component
 function AdminUpload({ lang }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -118,14 +119,25 @@ function AdminUpload({ lang }) {
   );
 }
 
+// Full Gallery Component with Carousel
 function FullGallery({ images, lang }) {
-  const [localSelectedImg, setLocalSelectedImg] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const t = translations[lang];
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = `${t.fullGallery} | ${translations[lang].title}`;
   }, [t.fullGallery, lang]);
+
+  const nextImg = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImg = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
   return (
     <div className="gallery-container gallery-page">
@@ -135,34 +147,27 @@ function FullGallery({ images, lang }) {
       </div>
       <div className="gallery-grid">
         {images.map((img, index) => (
-          <div 
-            key={index} 
-            className="gallery-item" 
-            style={{ overflow: 'hidden', display: 'flex' }}
-            onClick={() => setLocalSelectedImg(img)}
-          >
-            <img 
-              src={img} 
-              alt="Scout activity" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-            />
+          <div key={index} className="gallery-item" onClick={() => setSelectedIndex(index)}>
+            <img src={img} alt="Scout" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         ))}
       </div>
-      {localSelectedImg && (
-        <div className="modal" onClick={() => setLocalSelectedImg(null)}>
+      {selectedIndex !== null && (
+        <div className="modal" onClick={() => setSelectedIndex(null)}>
           <span className="close">&times;</span>
-          <img className="modal-content" src={localSelectedImg} alt="Enlarged" />
+          <button className="nav-btn prev" onClick={prevImg}>&#10094;</button>
+          <img className="modal-content" src={images[selectedIndex]} alt="Enlarged" />
+          <button className="nav-btn next" onClick={nextImg}>&#10095;</button>
         </div>
       )}
     </div>
   );
 }
 
-function HomePage({ images, setSelectedImg, lang }) {
+// HomePage Component
+function HomePage({ images, lang }) {
   const form = useRef();
-  const dadianiPhoto = '/assets/photos/dadianebis-sasakhle-palace-of-dadiani.jpg';
-  const ushguliPhoto = '/assets/photos/ushguli.jpg';
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const t = translations[lang];
 
   useEffect(() => {
@@ -177,12 +182,22 @@ function HomePage({ images, setSelectedImg, lang }) {
       form.current, 
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
-    .then((result) => {
+    .then(() => {
         alert(lang === 'ka' ? 'შეტყობინება გაიგზავნა!' : 'Message sent!');
         form.current.reset();
-    }, (error) => {
+    }, () => {
         alert(lang === 'ka' ? 'შეცდომაა, სცადეთ მოგვიანებით.' : 'Error, please try again.');
     });
+  };
+
+  const nextImg = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImg = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
   return (
@@ -196,7 +211,7 @@ function HomePage({ images, setSelectedImg, lang }) {
         </div>
       </header>
 
-      <section className="container" id="about" style={{ padding: '80px 20px' }}>
+      <section className="container" id="about">
         <div className="section-title"><h2>{t.whoWeAre}</h2></div>
         <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
             <p>{t.aboutText}</p>
@@ -206,8 +221,8 @@ function HomePage({ images, setSelectedImg, lang }) {
       <main className="container" id="region-section">
         <div className="section-title"><h2>{t.region}</h2></div>
         <div className="region-grid">
-          <RegionCard title={t.samegrelo} text={t.samegreloText} imgClass="img-samegrelo" onClick={() => setSelectedImg(dadianiPhoto)} />
-          <RegionCard title={t.svaneti} text={t.svanetiText} imgClass="img-svaneti" onClick={() => setSelectedImg(ushguliPhoto)} />
+          <RegionCard title={t.samegrelo} text={t.samegreloText} imgClass="img-samegrelo" />
+          <RegionCard title={t.svaneti} text={t.svanetiText} imgClass="img-svaneti" />
         </div>
       </main>
 
@@ -221,29 +236,19 @@ function HomePage({ images, setSelectedImg, lang }) {
         </div>
       </section>
 
-      <section className="container" id="mission" style={{ padding: '80px 20px' }}>
+      <section className="container" id="mission">
         <div className="section-title"><h2>{t.mission}</h2></div>
         <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
             <p>{t.missionText}</p>
         </div>
       </section>
 
-      {/* This is the target for the "Photos" link */}
       <section className="gallery-container" id="gallery-section">
         <div className="section-title"><h2>{t.photos}</h2></div>
         <div className="gallery-grid">
           {images.slice(0, 6).map((img, index) => (
-            <div 
-              key={index} 
-              className="gallery-item" 
-              style={{ overflow: 'hidden', display: 'flex' }}
-              onClick={() => setSelectedImg(img)}
-            >
-              <img 
-                src={img} 
-                alt="Gallery preview" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-              />
+            <div key={index} className="gallery-item" onClick={() => setSelectedIndex(index)}>
+              <img src={img} alt="Gallery preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           ))}
         </div>
@@ -251,6 +256,15 @@ function HomePage({ images, setSelectedImg, lang }) {
           <Link to="/gallery" className="cta-btn view-more-btn">{t.viewAll}</Link>
         </div>
       </section>
+
+      {selectedIndex !== null && (
+        <div className="modal" onClick={() => setSelectedIndex(null)}>
+          <span className="close">&times;</span>
+          <button className="nav-btn prev" onClick={prevImg}>&#10094;</button>
+          <img className="modal-content" src={images[selectedIndex]} alt="Enlarged" />
+          <button className="nav-btn next" onClick={nextImg}>&#10095;</button>
+        </div>
+      )}
 
       <section className="contact-container" id="contact">
         <div className="section-title"><h2>{t.contact}</h2></div>
@@ -265,14 +279,13 @@ function HomePage({ images, setSelectedImg, lang }) {
   );
 }
 
+// Main App Component
 function App() {
-  const [selectedImg, setSelectedImg] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lang, setLang] = useState('ka');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
   const t = translations[lang];
 
   const galleryImages = [
@@ -288,15 +301,11 @@ function App() {
     'https://res.cloudinary.com/dmgtsbro4/image/upload/v1768345815/scouts_gallery/sainsemc72f3ul9teb3l.jpg'
   ];
 
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location]);
-
-  const closeMenu = () => setIsMenuOpen(false);
+  useEffect(() => { setIsMenuOpen(false); }, [location]);
 
   const scrollToSection = (e, id) => {
     if (e) e.preventDefault();
-    closeMenu();
+    setIsMenuOpen(false);
 
     if (location.pathname !== '/') {
       navigate('/');
@@ -313,52 +322,32 @@ function App() {
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <nav>
-        <div 
-          className="logo" 
-          onClick={(e) => scrollToSection(e, 'top')}
-          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
-        >
+        <div className="logo" onClick={(e) => scrollToSection(e, 'top')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/assets/icon.ico" alt="Logo" style={{ height: '35px', borderRadius: '5px' }} />
           <span>{t.logoTitle}</span>
         </div>
         
-        <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? '✕' : '☰'}
-        </div>
+        <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? '✕' : '☰'}</div>
 
         <ul className={isMenuOpen ? "nav-links active" : "nav-links"}>
           <li className="nav-controls">
-            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>
-              {lang === 'ka' ? 'ENGLISH' : 'ქართული'}
-            </button>
-            <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>
-              {isDarkMode ? t.day : t.night}
-            </button>
+            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>{lang === 'ka' ? 'ENGLISH' : 'ქართული'}</button>
+            <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? t.day : t.night}</button>
           </li>
           <li><a href="/" onClick={(e) => scrollToSection(e, 'top')}>{t.main}</a></li>
           <li><a href="#about" onClick={(e) => scrollToSection(e, 'about')}>{t.whoWeAre}</a></li>
           <li><a href="#activities" onClick={(e) => scrollToSection(e, 'activities')}>{t.whatWeDo}</a></li>
           <li><a href="#mission" onClick={(e) => scrollToSection(e, 'mission')}>{t.mission}</a></li>
-          
-          {/* CHANGED THIS LINK TO SMOOTH SCROLL */}
           <li><a href="#gallery" onClick={(e) => scrollToSection(e, 'gallery-section')}>{t.gallery}</a></li>
-          
           <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>{t.contact}</a></li>
         </ul>
       </nav>
 
       <Routes>
-        <Route path="/" element={<HomePage images={galleryImages} setSelectedImg={setSelectedImg} lang={lang} />} />
+        <Route path="/" element={<HomePage images={galleryImages} lang={lang} />} />
         <Route path="/gallery" element={<FullGallery images={galleryImages} lang={lang} />} />
         <Route path="/admin-upload" element={<AdminUpload lang={lang} />} />
       </Routes>
-
-      {selectedImg && (
-        <div className="modal" onClick={() => setSelectedImg(null)}>
-          <span className="close">&times;</span>
-          <img className="modal-content" src={selectedImg} alt="Enlarged" />
-        </div>
-      )}
 
       <footer>
         <div className="footer-content">
@@ -373,9 +362,9 @@ function App() {
   )
 }
 
-function RegionCard({ title, text, imgClass, onClick }) {
+function RegionCard({ title, text, imgClass }) {
   return (
-    <div className="region-card" onClick={onClick}>
+    <div className="region-card">
       <div className={`region-img ${imgClass}`}></div>
       <div className="region-info"><h3>{title}</h3><p>{text}</p></div>
     </div>
