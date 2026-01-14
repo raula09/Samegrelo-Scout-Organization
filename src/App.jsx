@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
-import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
-import emailjs from '@emailjs/browser'
-import './App.css'
+import { useState, useEffect, useRef } from 'react';
+import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
+import './App.css';
 
 const translations = {
   ka: {
@@ -119,7 +119,7 @@ function AdminUpload({ lang }) {
   );
 }
 
-// Full Gallery Component with Carousel
+// Full Gallery Component
 function FullGallery({ images, lang }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const t = translations[lang];
@@ -143,19 +143,19 @@ function FullGallery({ images, lang }) {
     <div className="gallery-container gallery-page">
       <div className="section-title">
         <h1>{t.fullGallery}</h1>
-        <Link to="/" className="cta-btn back-btn">{t.back}</Link>
+        <Link to="/" className="cta-btn" style={{marginTop: '10px'}}>{t.back}</Link>
       </div>
       <div className="gallery-grid">
         {images.map((img, index) => (
           <div key={index} className="gallery-item" onClick={() => setSelectedIndex(index)}>
-            <img src={img} alt="Scout" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={img} alt="Scout" />
           </div>
         ))}
       </div>
 
       {selectedIndex !== null && (
         <div className="modal-overlay" onClick={() => setSelectedIndex(null)}>
-          <span className="close-modal">&times;</span>
+          <span className="close-modal" onClick={() => setSelectedIndex(null)}>&times;</span>
           <button className="nav-btn prev" onClick={prevImg}>&#10094;</button>
           <div className="modal-content-wrapper" onClick={(e) => e.stopPropagation()}>
              <img className="modal-content" src={images[selectedIndex]} alt="Enlarged" />
@@ -174,8 +174,8 @@ function HomePage({ images, lang }) {
   const t = translations[lang];
 
   useEffect(() => {
-    document.title = `${translations[lang].title} | ${t.subtitle}`;
-  }, [lang, t.subtitle]);
+    document.title = `${translations[lang].title}`;
+  }, [lang]);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -207,7 +207,7 @@ function HomePage({ images, lang }) {
     <>
       <header className="hero" id="home">
         <div className="hero-text">
-          <p style={{ color: '#ffc107', marginTop: '10px', fontSize: '1rem' }}>"{t.dev}"</p>
+          <p style={{ color: '#ffc107', marginBottom: '10px', fontSize: '1.2rem' }}>"{t.dev}"</p>
           <h1>{translations[lang].title}</h1>
           <p>{t.subtitle}</p>
           <a href="#contact" className="cta-btn">{t.join}</a>
@@ -216,18 +216,18 @@ function HomePage({ images, lang }) {
 
       <section className="container" id="about">
         <div className="section-title"><h2>{t.whoWeAre}</h2></div>
-        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+        <div className="centered-text">
             <p>{t.aboutText}</p>
         </div>
       </section>
 
-      <main className="container" id="region-section">
+      <section className="container" id="region-section">
         <div className="section-title"><h2>{t.region}</h2></div>
         <div className="region-grid">
           <RegionCard title={t.samegrelo} text={t.samegreloText} imgClass="img-samegrelo" />
           <RegionCard title={t.svaneti} text={t.svanetiText} imgClass="img-svaneti" />
         </div>
-      </main>
+      </section>
 
       <section className="activities-container" id="activities">
         <div className="section-title"><h2>{t.whatWeDo}</h2></div>
@@ -241,7 +241,7 @@ function HomePage({ images, lang }) {
 
       <section className="container" id="mission">
         <div className="section-title"><h2>{t.mission}</h2></div>
-        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+        <div className="centered-text">
             <p>{t.missionText}</p>
         </div>
       </section>
@@ -251,18 +251,18 @@ function HomePage({ images, lang }) {
         <div className="gallery-grid">
           {images.slice(0, 6).map((img, index) => (
             <div key={index} className="gallery-item" onClick={() => setSelectedIndex(index)}>
-              <img src={img} alt="Gallery preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={img} alt="Gallery preview" />
             </div>
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <Link to="/gallery" className="cta-btn view-more-btn">{t.viewAll}</Link>
+          <Link to="/gallery" className="cta-btn">{t.viewAll}</Link>
         </div>
       </section>
 
       {selectedIndex !== null && (
         <div className="modal-overlay" onClick={() => setSelectedIndex(null)}>
-          <span className="close-modal">&times;</span>
+          <span className="close-modal" onClick={() => setSelectedIndex(null)}>&times;</span>
           <button className="nav-btn prev" onClick={prevImg}>&#10094;</button>
           <div className="modal-content-wrapper" onClick={(e) => e.stopPropagation()}>
             <img className="modal-content" src={images[selectedIndex]} alt="Enlarged" />
@@ -327,7 +327,7 @@ function App() {
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <nav>
-        <div className="logo" onClick={(e) => scrollToSection(e, 'top')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="logo" onClick={(e) => scrollToSection(e, 'top')} style={{ cursor: 'pointer' }}>
           <img src="/assets/icon.ico" alt="Logo" style={{ height: '35px', borderRadius: '5px' }} />
           <span>{t.logoTitle}</span>
         </div>
@@ -336,7 +336,7 @@ function App() {
 
         <ul className={isMenuOpen ? "nav-links active" : "nav-links"}>
           <li className="nav-controls">
-            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>{lang === 'ka' ? 'ENGLISH' : 'ქართული'}</button>
+            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>{lang === 'ka' ? 'EN' : 'KA'}</button>
             <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? t.day : t.night}</button>
           </li>
           <li><a href="/" onClick={(e) => scrollToSection(e, 'top')}>{t.main}</a></li>
@@ -355,16 +355,14 @@ function App() {
       </Routes>
 
       <footer>
-        <div className="footer-content">
-            <p>© 2026 Scout Of Samegrelo</p>
-            <div className="social-links">
-                <a href="https://www.facebook.com/profile.php?id=100064482258846" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/scoutsofsamegrelo/" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
-            </div>
+        <p>© 2026 Scout Of Samegrelo</p>
+        <div className="social-links">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 function RegionCard({ title, text, imgClass }) {
@@ -373,7 +371,7 @@ function RegionCard({ title, text, imgClass }) {
       <div className={`region-img ${imgClass}`}></div>
       <div className="region-info"><h3>{title}</h3><p>{text}</p></div>
     </div>
-  )
+  );
 }
 
 export default App;

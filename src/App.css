@@ -1,4 +1,4 @@
-/* 1. Base Parameters */
+/* 1. Base Reset */
 * {
     margin: 0;
     padding: 0;
@@ -7,19 +7,13 @@
 
 html {
     scroll-behavior: smooth;
-    width: 100%;
 }
 
 body {
-    width: 100%;
     background-color: #f5f3ef;
     font-family: 'Segoe UI', sans-serif;
     color: #1a1a1a;
-    padding-top: 70px; /* Space for fixed nav */
-}
-
-#root {
-    width: 100%;
+    padding-top: 70px;
 }
 
 :root {
@@ -46,7 +40,6 @@ nav {
 .logo {
     color: var(--gold) !important;
     font-weight: bold;
-    text-decoration: none;
     font-size: 1.1rem;
     display: flex;
     align-items: center;
@@ -65,66 +58,58 @@ nav {
     color: var(--white);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
 }
 
 .nav-controls {
     display: flex;
-    gap: 10px;
-    align-items: center;
+    gap: 8px;
 }
 
 .theme-btn, .lang-btn {
     cursor: pointer;
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
     border: 1px solid var(--gold);
     background: transparent;
     color: var(--gold);
-    font-weight: bold;
-    font-size: 0.8rem;
-    transition: 0.3s;
-    white-space: nowrap;
+    font-size: 0.75rem;
 }
 
-/* 3. Hero Section */
+/* 3. Hero */
 .hero {
-    width: 100%;
     height: 85vh; 
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                url('https://res.cloudinary.com/dmgtsbro4/image/upload/v1768346114/scouts_gallery/iuvvymypcibqqxwcdbq5.jpg') center/cover no-repeat;
+                url('https://res.cloudinary.com/dmgtsbro4/image/upload/v1768346114/scouts_gallery/iuvvymypcibqqxwcdbq5.jpg') center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 0 10%;
+    color: white;
 }
 
-.hero-text h1 { 
-    color: var(--white); 
-    font-size: 3.2rem; 
-    line-height: 1.1;
-    margin-bottom: 25px; 
-}
+.hero-text h1 { font-size: 3rem; margin-bottom: 20px; }
 
-.hero-text p { 
-    color: rgba(255, 255, 255, 0.85); 
-    font-size: 1.2rem;
-    margin-bottom: 40px;
-}
-
-/* 4. Containers */
+/* 4. Sections */
 .container, .activities-container, .gallery-container, .contact-container {
-    width: 100%;
-    padding: 40px 5%;
+    padding: 60px 5%;
 }
 
 .section-title h2 {
     color: var(--dark-green);
-    font-size: 2rem;
+    font-size: 2.2rem;
     text-align: center;
-    padding: 20px 0;
+    margin-bottom: 40px;
+}
+
+.centered-text {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 /* 5. Region Cards */
@@ -135,36 +120,38 @@ nav {
 }
 
 .region-card {
-    background: var(--white);
-    border-radius: 10px;
+    background: white;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.region-img {
-    height: 250px;
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-}
-
+.region-img { height: 250px; background-size: cover; background-position: center; }
 .img-samegrelo { background-image: url('https://res.cloudinary.com/dmgtsbro4/image/upload/v1768346120/scouts_gallery/xqwmlaqvo8f0h0h0gkso.jpg'); }
 .img-svaneti { background-image: url('https://res.cloudinary.com/dmgtsbro4/image/upload/v1768346126/scouts_gallery/gnyaerdl04zrr4oziafa.jpg'); }
 
-.region-info { padding: 20px; border-left: 5px solid var(--bright-green); }
+.region-info { padding: 20px; border-left: 6px solid var(--bright-green); }
 
-/* 6. Activities */
-.activity-item {
-    background-color: var(--dark-green);
-    color: var(--gold) !important;
-    padding: 20px 35px;
-    border-radius: 8px;
-    font-weight: bold;
-    min-width: 180px;
-    text-align: center;
+/* 6. Activities (Fixed to match your screenshot) */
+.activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
-/* 7. Gallery Grid */
+.activity-item {
+    background-color: #162e21; /* Dark green box */
+    color: var(--gold) !important;
+    padding: 25px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+/* 7. Gallery */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -173,55 +160,53 @@ nav {
 
 .gallery-item {
     height: 250px;
-    border: 3px solid var(--white);
-    border-radius: 5px;
     cursor: pointer;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    border-radius: 8px;
 }
 
-.gallery-item:hover {
-    transform: scale(1.02);
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.3s;
 }
 
-/* --- FIX: MODAL & CAROUSEL SECTION --- */
+.gallery-item:hover img { transform: scale(1.05); }
+
+/* --- THE MODAL FIX --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    z-index: 9999; /* ABOVE EVERYTHING */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Ensure it's above the Nav (5000) */
 }
 
 .modal-content-wrapper {
     position: relative;
     max-width: 90%;
-    max-height: 85%;
-    display: flex;
-    justify-content: center;
+    max-height: 80%;
 }
 
 .modal-content {
-    max-width: 100%;
+    width: 100%;
     max-height: 80vh;
     object-fit: contain;
-    border: 4px solid var(--white);
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border: 3px solid white;
 }
 
 .close-modal {
     position: absolute;
-    top: 20px;
-    right: 40px;
+    top: 30px;
+    right: 30px;
     color: white;
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 50px;
     cursor: pointer;
     z-index: 10001;
 }
@@ -229,82 +214,76 @@ nav {
 .nav-btn {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255,255,255,0.1);
     color: white;
     border: none;
-    padding: 20px 15px;
-    font-size: 30px;
+    padding: 20px;
+    font-size: 2rem;
     cursor: pointer;
-    transition: 0.3s;
-    border-radius: 5px;
-}
-
-.nav-btn:hover {
-    background: var(--bright-green);
+    z-index: 10000;
 }
 
 .prev { left: 20px; }
 .next { right: 20px; }
 
-/* 8. Footer */
+/* 8. Footer (Fixed centering) */
 footer {
     background-color: var(--dark-green);
-    color: var(--white);
-    padding: 40px 5%;
+    color: white;
+    padding: 40px 20px;
     text-align: center;
-    margin-top: 50px;
-    border-top: 4px solid var(--gold);
+    border-top: 5px solid var(--gold);
 }
 
-/* 9. Mobile Fixes */
+.social-links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-links a { color: var(--gold); font-size: 1.5rem; }
+
+/* 9. Contact */
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-form input, .contact-form textarea {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* 10. Mobile */
 @media (max-width: 768px) {
-    .menu-icon { 
-        display: block !important; 
-        color: var(--gold);
-        font-size: 2rem; 
-        cursor: pointer;
-        margin-left: 10px;
-    }
-
     .nav-links { display: none; }
-
     .nav-links.active {
         display: flex;
         flex-direction: column;
         position: fixed;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background-color: var(--dark-green);
-        padding: 20px 0;
-        z-index: 5001;
+        top: 70px; left: 0; width: 100%; height: 100vh;
+        background: var(--dark-green);
+        padding-top: 50px;
     }
-
-    .modal-content {
-        max-height: 60vh;
-    }
-    
-    .nav-btn {
-        padding: 10px;
-        font-size: 20px;
-    }
+    .menu-icon { display: block; color: var(--gold); font-size: 2rem; cursor: pointer; }
+    .hero-text h1 { font-size: 2rem; }
 }
 
-/* 10. Dark Mode */
-.dark-mode { background-color: #1a1a1a !important; color: white !important; }
-.dark-mode body, .dark-mode .container { background-color: #1a1a1a !important; }
+.dark-mode { background-color: #1a1a1a; color: white; }
+.dark-mode .container, .dark-mode body { background-color: #1a1a1a; }
 .dark-mode .section-title h2 { color: var(--gold); }
 
 .cta-btn {
     background-color: var(--bright-green);
     color: white;
     padding: 12px 25px;
-    border-radius: 5px;
+    border-radius: 6px;
     text-decoration: none;
     font-weight: bold;
     display: inline-block;
-    border: none;
-    cursor: pointer;
 }
