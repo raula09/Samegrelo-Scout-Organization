@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
 import './App.css'
 
@@ -187,7 +187,7 @@ function HomePage({ images, setSelectedImg, lang }) {
 
   return (
     <>
-      <header className="hero">
+      <header className="hero" id="home">
         <div className="hero-text">
           <p style={{ color: '#ffc107', marginTop: '10px', fontSize: '1rem' }}>"{t.dev}"</p>
           <h1>{translations[lang].title}</h1>
@@ -228,7 +228,8 @@ function HomePage({ images, setSelectedImg, lang }) {
         </div>
       </section>
 
-      <section className="gallery-container" id="gallery">
+      {/* This is the target for the "Photos" link */}
+      <section className="gallery-container" id="gallery-section">
         <div className="section-title"><h2>{t.photos}</h2></div>
         <div className="gallery-grid">
           {images.slice(0, 6).map((img, index) => (
@@ -270,6 +271,7 @@ function App() {
   const [lang, setLang] = useState('ka');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const t = translations[lang];
 
@@ -286,34 +288,41 @@ function App() {
     'https://res.cloudinary.com/dmgtsbro4/image/upload/v1768345815/scouts_gallery/sainsemc72f3ul9teb3l.jpg'
   ];
 
-  const logoPhoto = '/assets/icon.ico';
-
   useEffect(() => {
     setIsMenuOpen(false);
-    if (!location.hash) {
-        window.scrollTo(0, 0);
-    }
   }, [location]);
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  const scrollToSection = (e, id) => {
+    if (e) e.preventDefault();
+    closeMenu();
+
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const target = id === 'top' ? document.documentElement : document.getElementById(id);
+        target?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const target = id === 'top' ? document.documentElement : document.getElementById(id);
+      target?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <nav>
-        <div className="logo" onClick={() => {
-            closeMenu();
-            setSelectedImg(logoPhoto);
-          }}
+        <div 
+          className="logo" 
+          onClick={(e) => scrollToSection(e, 'top')}
           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
         >
           <img src="/assets/icon.ico" alt="Logo" style={{ height: '35px', borderRadius: '5px' }} />
           <span>{t.logoTitle}</span>
         </div>
         
-        <div 
-          className="menu-icon" 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
+        <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? '✕' : '☰'}
         </div>
 
@@ -326,12 +335,15 @@ function App() {
               {isDarkMode ? t.day : t.night}
             </button>
           </li>
-          <li><Link to="/" onClick={closeMenu}>{t.main}</Link></li>
-          <li><a href="#about" onClick={closeMenu}>{t.whoWeAre}</a></li>
-          <li><a href="#activities" onClick={closeMenu}>{t.whatWeDo}</a></li>
-          <li><a href="#mission" onClick={closeMenu}>{t.mission}</a></li>
-          <li><Link to="/gallery" onClick={closeMenu}>{t.gallery}</Link></li>
-          <li><a href="#contact" onClick={closeMenu}>{t.contact}</a></li>
+          <li><a href="/" onClick={(e) => scrollToSection(e, 'top')}>{t.main}</a></li>
+          <li><a href="#about" onClick={(e) => scrollToSection(e, 'about')}>{t.whoWeAre}</a></li>
+          <li><a href="#activities" onClick={(e) => scrollToSection(e, 'activities')}>{t.whatWeDo}</a></li>
+          <li><a href="#mission" onClick={(e) => scrollToSection(e, 'mission')}>{t.mission}</a></li>
+          
+          {/* CHANGED THIS LINK TO SMOOTH SCROLL */}
+          <li><a href="#gallery" onClick={(e) => scrollToSection(e, 'gallery-section')}>{t.gallery}</a></li>
+          
+          <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>{t.contact}</a></li>
         </ul>
       </nav>
 
