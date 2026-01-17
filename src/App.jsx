@@ -69,7 +69,10 @@ const translations = {
         aboutText: "ჩვენ ვართ მოხალისეობრივი, არაპოლიტიკური ორგანიზაცია ახალგაზრდებისთვის.",
         missionText: "ჩვენი მისიაა წვლილი შევიტანოთ ახალგაზრდების აღზრდაში ღირებულებათა სისტემის მეშვეობით.",
         logoLine1: "სამეგრელოს",
-        logoLine2: " სკაუტები"
+        logoLine2: " სკაუტები",
+        developerTitle: "დეველოპერი",
+        developerText: "ვებსაიტი შექმნილია: ",
+        devStory: "მე ვარ ლუკა გულედანი, ვებ-დეველოპერი და სკაუტური მოძრაობის წევრი. ეს პროექტი შეიქმნა იმისათვის, რომ დავეხმაროთ სამეგრელოს სკაუტებს ციფრულ სივრცეში განვითარებასა და ახალი წევრების მოზიდვაში."
     },
     en: {
         title: "Samegrelo Organization of the Scout Movement of Georgia",
@@ -111,11 +114,13 @@ const translations = {
         aboutText: "We are a voluntary, non-political educational movement for young people.",
         missionText: "Our mission is to contribute to the education of young people through a value system.",
         logoLine1: "Scouts",
-        logoLine2: " Of Samegrelo"
+        logoLine2: " Of Samegrelo",
+        developerTitle: "Developer",
+        developerText: "Website developed by: ",
+        devStory: "I am Luka Guledani, a web developer and a member of the scout movement. This project was created to help Scouts of Samegrelo grow in the digital space and reach new members."
     }
 };
 
-// --- NEW COMPONENT: FIXES THE BOTTOM-LAUNCH ISSUE ---
 function ScrollToTop() {
     const { pathname } = useLocation();
     useEffect(() => {
@@ -174,23 +179,10 @@ function FullGallery({ lang }) {
     const [selectedYear, setSelectedYear] = useState('All');
     const [currentIndex, setCurrentIndex] = useState(null);
     const t = translations[lang];
-
     const years = ['All', '2026', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014'];
-
-    const filteredPhotos = selectedYear === 'All' 
-        ? ALL_PHOTOS 
-        : ALL_PHOTOS.filter(photo => photo.year === selectedYear);
-
-    const showNext = (e) => {
-        if (e) e.stopPropagation();
-        setCurrentIndex((prev) => (prev + 1) % filteredPhotos.length);
-    };
-
-    const showPrev = (e) => {
-        if (e) e.stopPropagation();
-        setCurrentIndex((prev) => (prev - 1 + filteredPhotos.length) % filteredPhotos.length);
-    };
-
+    const filteredPhotos = selectedYear === 'All' ? ALL_PHOTOS : ALL_PHOTOS.filter(photo => photo.year === selectedYear);
+    const showNext = (e) => { e?.stopPropagation(); setCurrentIndex((prev) => (prev + 1) % filteredPhotos.length); };
+    const showPrev = (e) => { e?.stopPropagation(); setCurrentIndex((prev) => (prev - 1 + filteredPhotos.length) % filteredPhotos.length); };
     const selectedImg = currentIndex !== null ? filteredPhotos[currentIndex] : null;
 
     return (
@@ -199,45 +191,28 @@ function FullGallery({ lang }) {
                 <h1>{t.fullGallery} {selectedYear !== 'All' ? `(${selectedYear})` : ''}</h1>
                 <div className="filter-bar">
                     {years.map(year => (
-                        <button 
-                            key={year} 
-                            className={selectedYear === year ? 'active' : ''} 
-                            onClick={() => {
-                                setSelectedYear(year);
-                                setCurrentIndex(null); 
-                            }}
-                        >
-                            {year}
-                        </button>
+                        <button key={year} className={selectedYear === year ? 'active' : ''} onClick={() => { setSelectedYear(year); setCurrentIndex(null); }}>{year}</button>
                     ))}
                 </div>
                 <Link to="/" className="cta-btn" style={{marginTop: '30px'}}>{t.back}</Link>
             </header>
-
             <div className="masonry-grid">
                 {filteredPhotos.map((img, index) => (
                     <div key={img.id} className="masonry-item" onClick={() => setCurrentIndex(index)}>
                         <img src={img.url} alt={img.title} loading="lazy" />
                         <div className="item-hover-overlay">
-                            <div className="overlay-content">
-                                <h2 className="overlay-type">{img.type}</h2>
-                                <p className="overlay-year">{img.year}</p>
-                            </div>
+                            <div className="overlay-content"><h2 className="overlay-type">{img.type}</h2><p className="overlay-year">{img.year}</p></div>
                         </div>
                     </div>
                 ))}
             </div>
-
             {selectedImg && (
                 <div className="lightbox" onClick={() => setCurrentIndex(null)}>
                     <button className="close-btn" onClick={() => setCurrentIndex(null)}>×</button>
                     <button className="nav-arrow left" onClick={showPrev}>❮</button>
                     <div className="lightbox-center" onClick={(e) => e.stopPropagation()}>
                         <img src={selectedImg.url} alt={selectedImg.title} className="lightbox-img" />
-                        <div className="lightbox-caption">
-                            <h3>{selectedImg.title}</h3>
-                            <p>{selectedImg.year} - {selectedImg.type}</p>
-                        </div>
+                        <div className="lightbox-caption"><h3>{selectedImg.title}</h3><p>{selectedImg.year} - {selectedImg.type}</p></div>
                     </div>
                     <button className="nav-arrow right" onClick={showNext}>❯</button>
                 </div>
@@ -250,26 +225,15 @@ function HomePage({ lang }) {
     const form = useRef();
     const [selectedIndex, setSelectedIndex] = useState(null);
     const t = translations[lang];
-
     useEffect(() => { document.title = `${translations[lang].title}`; }, [lang]);
 
     const sendEmail = (e) => {
         e.preventDefault();
-        emailjs.sendForm(
-            import.meta.env.VITE_EMAILJS_SERVICE_ID,
-            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-            form.current, 
-            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-        ).then(() => {
-            alert(lang === 'ka' ? 'შეტყობინება გაიგზავნა!' : 'Message sent!');
-            form.current.reset();
-        }, () => {
-            alert(lang === 'ka' ? 'შეცდომაა, სცადეთ მოგვიანებით.' : 'Error, please try again.');
-        });
+        emailjs.sendForm(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_TEMPLATE_ID, form.current, import.meta.env.VITE_EMAILJS_PUBLIC_KEY)
+        .then(() => { alert(lang === 'ka' ? 'შეტყობინება გაიგზავნა!' : 'Message sent!'); form.current.reset(); }, () => { alert(lang === 'ka' ? 'შეცდომაა, სცადეთ მოგვიანებით.' : 'Error, please try again.'); });
     };
 
     const previewImages = ALL_PHOTOS.slice(0, 6); 
-
     const nextImg = (e) => { e.stopPropagation(); setSelectedIndex((prev) => (prev + 1) % previewImages.length); };
     const prevImg = (e) => { e.stopPropagation(); setSelectedIndex((prev) => (prev - 1 + previewImages.length) % previewImages.length); };
 
@@ -337,17 +301,12 @@ function HomePage({ lang }) {
                         <div key={img.id} className="masonry-item" onClick={() => setSelectedIndex(index)}>
                             <img src={img.url} alt={img.title} loading="lazy" />
                             <div className="item-hover-overlay">
-                                <div className="overlay-content">
-                                    <h2 className="overlay-type">{img.type}</h2>
-                                    <p className="overlay-year">{img.year}</p>
-                                </div>
+                                <div className="overlay-content"><h2 className="overlay-type">{img.type}</h2><p className="overlay-year">{img.year}</p></div>
                             </div>
                         </div>
                     ))}
                 </div>
-                <div style={{ textAlign: 'center', marginTop: '40px' }}>
-                    <Link to="/gallery" className="cta-btn">{t.viewAll}</Link>
-                </div>
+                <div style={{ textAlign: 'center', marginTop: '40px' }}><Link to="/gallery" className="cta-btn">{t.viewAll}</Link></div>
             </section>
 
             {selectedIndex !== null && (
@@ -370,6 +329,64 @@ function HomePage({ lang }) {
                     <button type="submit" className="cta-btn">{t.send}</button>
                 </form>
             </section>
+
+            {/* --- NEW DEVELOPER SECTION --- */}
+            <section className="container" id="developer" style={{ padding: '80px 20px', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
+                <div className="section-title">
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>{t.developerTitle}</h2>
+                </div>
+                
+                <div className="dev-layout" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'row', 
+                    flexWrap: 'wrap',
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '50px', 
+                    maxWidth: '1000px',
+                    margin: '0 auto'
+                }}>
+                    {/* Photo Column */}
+                    <div className="dev-photo-wrapper" style={{ flexShrink: 0 }}>
+                        <img 
+                            src="https://res.cloudinary.com/dmgtsbro4/image/upload/v1768667645/IMG_20221023_155538_205_kzzwyi.jpg" 
+                            alt="Luka Guledani" 
+                            style={{ 
+                                width: '240px', 
+                                height: '240px', 
+                                borderRadius: '20px', // Changed to rounded square to match your second image feel
+                                objectFit: 'cover', 
+                                border: '4px solid #ffc107', 
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.15)'
+                            }} 
+                        />
+                    </div>
+
+                    {/* Text Column */}
+                    <div className="dev-story-content" style={{ 
+                        flex: '1', 
+                        minWidth: '300px', 
+                        textAlign: 'left' 
+                    }}>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '15px', color: '#333' }}>
+                            {t.developerText} <span style={{ color: '#ffc107', fontWeight: 'bold' }}>Luka Guledani</span>
+                        </h3>
+                        
+                        <p style={{ 
+                            lineHeight: '1.8', 
+                            fontSize: '1.1rem',
+                            color: '#555',
+                            fontStyle: 'italic',
+                            backgroundColor: 'rgba(255, 193, 7, 0.05)',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            borderLeft: '5px solid #ffc107'
+                        }}>
+                            "{t.devStory}"
+                        </p>
+                    </div>
+                </div>
+            </section>
         </>
     );
 }
@@ -384,44 +401,26 @@ function App() {
 
     useEffect(() => { setIsMenuOpen(false); }, [location]);
 
-    // Updated scroll logic to handle both ID navigation and page top resets
     const scrollToSection = (e, id) => {
         if (e) e.preventDefault();
         setIsMenuOpen(false);
-        
         const executeScroll = () => {
-            if (id === 'top') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                const target = document.getElementById(id);
-                target?.scrollIntoView({ behavior: 'smooth' });
-            }
+            if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); } 
+            else { const target = document.getElementById(id); target?.scrollIntoView({ behavior: 'smooth' }); }
         };
-
-        if (location.pathname !== '/') {
-            navigate('/');
-            setTimeout(executeScroll, 150);
-        } else {
-            executeScroll();
-        }
+        if (location.pathname !== '/') { navigate('/'); setTimeout(executeScroll, 150); } 
+        else { executeScroll(); }
     };
 
     return (
         <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
-            {/* THIS FIXES THE GALLERY SCROLL ISSUE */}
             <ScrollToTop />
-
             <nav>
                 <div className="logo" onClick={(e) => scrollToSection(e, 'top')} style={{ cursor: 'pointer' }}>
                     <img src="/assets/icon.ico" alt="Logo" style={{ height: '45px', borderRadius: '5px' }} />
-                    <div className="logo-text">
-                        <span className="line1">{t.logoLine1}</span>
-                        <span className="line2">{t.logoLine2}</span>
-                    </div>
+                    <div className="logo-text"><span className="line1">{t.logoLine1}</span><span className="line2">{t.logoLine2}</span></div>
                 </div>
-                <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? '✕' : '☰'}
-                </div>
+                <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? '✕' : '☰'}</div>
                 <ul className={isMenuOpen ? "nav-links active" : "nav-links"}>
                     <li><a href="/" onClick={(e) => scrollToSection(e, 'top')}>{t.main}</a></li>
                     <li><a href="#about" onClick={(e) => scrollToSection(e, 'about')}>{t.whoWeAre}</a></li>
@@ -433,12 +432,8 @@ function App() {
                     <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>{t.contact}</a></li>
                     <li className="nav-controls-wrapper">
                         <div className="nav-controls">
-                            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>
-                                {lang === 'ka' ? 'EN' : 'KA'}
-                            </button>
-                            <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>
-                                {isDarkMode ? t.day : t.night}
-                            </button>
+                            <button className="lang-btn" onClick={() => setLang(lang === 'ka' ? 'en' : 'ka')}>{lang === 'ka' ? 'EN' : 'KA'}</button>
+                            <button className="theme-btn" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? t.day : t.night}</button>
                         </div>
                     </li>
                 </ul>
